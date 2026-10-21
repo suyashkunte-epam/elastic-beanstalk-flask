@@ -18,22 +18,22 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-1
+          aws-region: us-east-1
 
       - name: Zip application
         run: zip -r deploy.zip application.py requirements.txt
 
       - name: Upload to S3
         run: |
-          aws s3 cp deploy.zip s3://elasticbeanstalk-eu-west-1-311141534372/deploy.zip
+          aws s3 cp deploy.zip s3://elasticbeanstalk-us-east-1-890742610830/deploy.zip
 
       - name: Create new Elastic Beanstalk version
         run: |
           aws elasticbeanstalk create-application-version \
             --application-name cmtr-2mdks171-app \
             --version-label "v-${{ github.run_number }}" \
-            --source-bundle S3Bucket="elasticbeanstalk-eu-west-1-311141534372",S3Key="deploy.zip" \
-            --region eu-west-1
+            --source-bundle S3Bucket="elasticbeanstalk-us-east-1-890742610830",S3Key="deploy.zip" \
+            --region us-east-1
 
       - name: Deploy to Elastic Beanstalk environment
         run: |
@@ -41,4 +41,4 @@ jobs:
             --application-name cmtr-2mdks171-app \
             --environment-name cmtr-2mdks171-env \
             --version-label "v-${{ github.run_number }}" \
-            --region eu-west-1
+            --region us-east-1
